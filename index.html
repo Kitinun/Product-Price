@@ -32,11 +32,40 @@
       const css_label = "flex block";
       const css_button = "block w-auto bg-blue border rounded-md px-3 py-1";
 
+      // Sample Data
+      const products = [
+        {
+          "name" : "UX,UI,CX (+ID)",
+          "sku" : "UX, UI,CX",
+          "orderBump" : "ID",
+          "price" : 2290,
+          "price_o" : 599
+        },
+        {
+          "name" : "FT,RN,UX,UI",
+          "sku" : "FT,RN,UX,UI",
+          "orderBump" : "-",
+          "price" : 3290,
+          "price_o" : 0
+        },
+        {
+          "name" : "SM,GM (+GH)",
+          "sku" : "SM,GM",
+          "orderBump" : "GH",
+          "price" : 1590,
+          "price_o" : 599
+        }
+      ];
+
       const ReactAppFromCDN = () => {
         const [initSKU, setInitSKU] = React.useState("UX,UI,PS,AI");
         const [orderBump, setOrderBump] = React.useState("WD");
         const [sku, setSKU] = React.useState("UX,UI,PS,AI,WD");
+        const [bundles, setBundles] = React.useState(products);
+
         const [loaded, setLoaded] = React.useState(false);
+
+
         const loadSKU = (e) => {
           e.preventDefault();
           setLoaded(true);
@@ -46,46 +75,70 @@
           <div class={css_container}>
             <h1>Product Price</h1>
             <form class="">
-              <label class={css_label}>
-                Initial SKU
-                <input
-                  type="text"
-                  value={initSKU}
-                  class={css_input}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </label>
-              <label class={css_label}>
-                Order Bump
-                <input
-                  type="text"
-                  value={orderBump}
-                  class={css_input}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </label>
-              <label class={css_label}>
-                SKU
-                <input
-                  type="text"
-                  value={sku}
-                  class={css_input}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </label>
-              <button
-                type="button"
-                name="button"
-                onClick={loadSKU}
-                class={css_button}
-              >
-                Load
-              </button>
-              {!loaded ? (
-                <div className="center">Not Load</div>
-              ) : (
-                <div className="center">Loaded</div>
-              )}
+              <div id="search-area">
+                <label class={css_label}>
+                  Initial SKU
+                  <input
+                    type="text"
+                    value={initSKU}
+                    class={css_input}
+                    disabled="true"
+                  />
+                </label>
+                <label class={css_label}>
+                  Order Bump
+                  <input
+                    type="text"
+                    value={orderBump}
+                    class={css_input}
+                    disabled="true"
+                  />
+                </label>
+                <label class={css_label}>
+                  SKU
+                  <input
+                    type="text"
+                    value={sku}
+                    class={css_input}
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </label>
+                <button
+                  type="button"
+                  name="button"
+                  onClick={loadSKU}
+                  class={css_button}
+                >
+                  Load
+                </button>
+              </div>
+              <div id="pricing-area">
+                <div id="Bundle">
+                  <h2>Bundle</h2>
+                  <table>
+                    {bundles.map((item, index) => (
+                      <tr>
+                        <td>
+                          {item["name"]}
+                          </td>
+                          <td>
+                            {item["sku"]}
+                        </td>
+                        <td>
+                          {item["orderBump"]} (+{item["price_o"]})
+                        </td>
+                        <td>
+                          {item["price"]} 
+                          {item["price_o"]>0? "("+(item["price"]+item["price_o"])+")":""}
+                        </td>
+                      </tr>
+                    ))}
+                  </table>
+                </div>
+                <div id="Order">
+                  <h2>Order</h2>
+                </div>
+              </div>
             </form>
           </div>
         );
