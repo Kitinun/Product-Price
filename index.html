@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>React CDN</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style type="text/tailwindcss">
+      @layer utilities {
+        .content-auto {
+          content-visibility: auto;
+        }
+      }
+    </style>
+
+    <script
+      crossorigin
+      src="https://unpkg.com/react@17/umd/react.production.min.js"
+    ></script>
+    <script
+      crossorigin
+      src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+  </head>
+  <body>
+    <div class="container mx-auto px-4">
+      <h1>Product Price</h1>
+      <div id="sku-search"></div>
+    </div>
+    <script type="text/babel">
+      const class_input = "block bg-white w-full border border-slate-300 rounded-md px-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 ml-2";
+
+      const ReactAppFromCDN = () => {
+        const [initSKU, setInitSKU] = React.useState("UX,UI,PS,AI");
+        const [orderBump, setOrderBump] = React.useState("WD");
+        const [sku, setSKU] = React.useState("UX,UI,PS,AI,WD");
+        return (
+          <form class="">
+            <label class="flex block">
+              Initial SKU
+              <input 
+                type="text"
+                value={initSKU}
+                class={class_input}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </label>
+            <label class="flex block">
+              Order Bump
+              <input 
+                type="text"
+                value={orderBump}
+                class={class_input}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </label>
+            <label class="flex block">
+              SKU
+              <input 
+                type="text"
+                value={sku}
+                class={class_input}
+                onChange={(e) => setName(e.target.value)}
+              />
+            </label>
+          </form>
+        );
+      };
+      ReactDOM.render(<ReactAppFromCDN />, document.querySelector("#sku-search"));
+    </script>
+  </body>
+</html>
