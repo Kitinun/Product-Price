@@ -29,7 +29,9 @@
       <div id="sku-search"></div>
     </div>
     <script type="text/babel">
-      const class_input = "block bg-white w-full border border-slate-300 rounded-md px-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 ml-2";
+      const css_input = "block bg-white w-auto border border-slate-300 rounded-md px-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 ml-2";
+      const css_label = "flex block";
+      const css_button = "block w-auto bg-blue border rounded-md px-3 py-1";
 
       const ReactAppFromCDN = () => {
         const [initSKU, setInitSKU] = React.useState("UX,UI,PS,AI");
@@ -37,33 +39,34 @@
         const [sku, setSKU] = React.useState("UX,UI,PS,AI,WD");
         return (
           <form class="">
-            <label class="flex block">
+            <label class={css_label}>
               Initial SKU
               <input 
                 type="text"
                 value={initSKU}
-                class={class_input}
+                class={css_input}
                 onChange={(e) => setName(e.target.value)}
               />
             </label>
-            <label class="flex block">
+            <label class={css_label}>
               Order Bump
               <input 
                 type="text"
                 value={orderBump}
-                class={class_input}
+                class={css_input}
                 onChange={(e) => setName(e.target.value)}
               />
             </label>
-            <label class="flex block">
+            <label class={css_label}>
               SKU
               <input 
                 type="text"
                 value={sku}
-                class={class_input}
+                class={css_input}
                 onChange={(e) => setName(e.target.value)}
               />
             </label>
+            <button class={css_button}>Load</button>
           </form>
         );
       };
