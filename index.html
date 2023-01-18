@@ -24,12 +24,11 @@
     <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
   </head>
   <body>
-    <div class="container mx-auto px-4">
-      <h1>Product Price</h1>
-      <div id="sku-search"></div>
-    </div>
+    <div id="root"></div>
     <script type="text/babel">
-      const css_input = "block bg-white w-auto border border-slate-300 rounded-md px-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 ml-2";
+      const css_container = "container mx-auto px-4";
+      const css_input =
+        "block bg-white w-auto border border-slate-300 rounded-md px-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 ml-2";
       const css_label = "flex block";
       const css_button = "block w-auto bg-blue border rounded-md px-3 py-1";
 
@@ -37,40 +36,61 @@
         const [initSKU, setInitSKU] = React.useState("UX,UI,PS,AI");
         const [orderBump, setOrderBump] = React.useState("WD");
         const [sku, setSKU] = React.useState("UX,UI,PS,AI,WD");
+        const [loaded, setLoaded] = React.useState(false);
+        const loadSKU = (e) => {
+          e.preventDefault();
+          setLoaded(true);
+        };
+
         return (
-          <form class="">
-            <label class={css_label}>
-              Initial SKU
-              <input 
-                type="text"
-                value={initSKU}
-                class={css_input}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </label>
-            <label class={css_label}>
-              Order Bump
-              <input 
-                type="text"
-                value={orderBump}
-                class={css_input}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </label>
-            <label class={css_label}>
-              SKU
-              <input 
-                type="text"
-                value={sku}
-                class={css_input}
-                onChange={(e) => setName(e.target.value)}
-              />
-            </label>
-            <button class={css_button}>Load</button>
-          </form>
+          <div class={css_container}>
+            <h1>Product Price</h1>
+            <form class="">
+              <label class={css_label}>
+                Initial SKU
+                <input
+                  type="text"
+                  value={initSKU}
+                  class={css_input}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </label>
+              <label class={css_label}>
+                Order Bump
+                <input
+                  type="text"
+                  value={orderBump}
+                  class={css_input}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </label>
+              <label class={css_label}>
+                SKU
+                <input
+                  type="text"
+                  value={sku}
+                  class={css_input}
+                  onChange={(e) => setName(e.target.value)}
+                />
+              </label>
+              <button
+                type="button"
+                name="button"
+                onClick={loadSKU}
+                class={css_button}
+              >
+                Load
+              </button>
+              {!loaded ? (
+                <div className="center">Not Load</div>
+              ) : (
+                <div className="center">Loaded</div>
+              )}
+            </form>
+          </div>
         );
       };
-      ReactDOM.render(<ReactAppFromCDN />, document.querySelector("#sku-search"));
+      ReactDOM.render(<ReactAppFromCDN />, document.querySelector("#root"));
     </script>
   </body>
 </html>
