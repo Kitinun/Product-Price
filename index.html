@@ -26,10 +26,10 @@
   <body>
     <div id="root"></div>
     <script type="text/babel">
-      const css_container = "container mx-auto px-4";
+      const css_container = "container mx-auto p-4";
       const css_input =
         "block bg-white w-auto border border-slate-300 rounded-md px-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 ml-2";
-      const css_label = "flex block";
+      const css_label = "flex text-lg";
       const css_button = "block w-auto bg-blue border rounded-md px-3 py-1";
 
       const ReactAppFromCDN = () => {
@@ -44,48 +44,55 @@
 
         return (
           <div class={css_container}>
-            <h1>Product Price</h1>
-            <form class="">
-              <label class={css_label}>
-                Initial SKU
-                <input
-                  type="text"
-                  value={initSKU}
-                  class={css_input}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </label>
-              <label class={css_label}>
-                Order Bump
-                <input
-                  type="text"
-                  value={orderBump}
-                  class={css_input}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </label>
-              <label class={css_label}>
-                SKU
-                <input
-                  type="text"
-                  value={sku}
-                  class={css_input}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </label>
-              <button
-                type="button"
-                name="button"
-                onClick={loadSKU}
-                class={css_button}
-              >
-                Load
-              </button>
-              {!loaded ? (
-                <div className="center">Not Load</div>
-              ) : (
-                <div className="center">Loaded</div>
-              )}
+            <h1 class="text-2xl font-bold">Product Price</h1>
+            <form class="pt-3">
+              <div class="flex">
+                <label class="flex text-lg">
+                  Initial SKU
+                  <input
+                    type="text"
+                    value={initSKU}
+                    class="block bg-white w-[500px] border border-slate-300 rounded-md px-3 shadow-sm ml-2"
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </label>
+                <label class="flex text-lg ml-4">
+                  Order Bump
+                  <input
+                    type="text"
+                    value={orderBump}
+                    class="block bg-white w-[500px] border border-slate-300 rounded-md px-3 shadow-sm ml-2"
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </label>
+              </div>
+              <div class="flex mt-4">
+                <label class="flex text-lg">
+                  SKU
+                  <input
+                    type="text"
+                    value={sku}
+                    class="block bg-white w-[500px] border border-slate-300 rounded-md px-3 shadow-sm focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 ml-[55px]"
+                    onChange={(e) => setName(e.target.value)}
+                  />
+                </label>
+                <button
+                  type="button"
+                  name="button"
+                  onClick={loadSKU}
+                  class="block w-auto bg-blue border rounded-md px-3 py-1 ml-4 bg-[#0085fc] text-white"
+                >
+                  Load
+                </button>
+              </div>
+
+              <div class="mt-5">
+                {!loaded ? (
+                  <div className="center">Not Load</div>
+                ) : (
+                  <div className="center">Loaded</div>
+                )}
+              </div>
             </form>
           </div>
         );
