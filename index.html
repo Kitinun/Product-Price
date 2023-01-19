@@ -35,7 +35,7 @@
       // Sample Data ********************
       const bundle_data = [
         {
-          id : "b01",
+          id: "b01",
           name: "UX,UI,CX (+ID)",
           sku: "UX, UI,CX",
           orderBump: "ID",
@@ -43,7 +43,7 @@
           price_o: 599,
         },
         {
-          id : "b02",
+          id: "b02",
           name: "FT,RN,UX,UI",
           sku: "FT,RN,UX,UI",
           orderBump: "",
@@ -51,7 +51,7 @@
           price_o: 0,
         },
         {
-          id : "b03",
+          id: "b03",
           name: "SM,GM (+GH)",
           sku: "SM,GM",
           orderBump: "GH",
@@ -59,14 +59,14 @@
           price_o: 599,
         },
       ];
-      
+
       // Functions ********************
-      var selectBundle = function(e, bundle_id) {
-        console.log(bundle_id + " : "+e.target.value);
+      var selectBundle = function (e, bundle_id) {
+        console.log(bundle_id + " : " + e.target.value);
       };
 
-      var selectBundle = function(e, bundle_id) {
-        console.log(bundle_id + " : "+e.target.value);
+      var selectBundle = function (e, bundle_id) {
+        console.log(bundle_id + " : " + e.target.value);
       };
 
       // App ********************
@@ -79,12 +79,12 @@
         const [loaded, setLoaded] = React.useState(false);
 
         const discount_opts = [
-          { value: 'default', label: 'Sale Price' },
-          { value: '10%', label: 'Discount 10%' },
-          { value: '20%', label: 'Discount 20%' },
-          { value: '30%', label: 'Discount 30%' },
-          { value: 'Custom', label: 'Custom' }
-        ]
+          { value: "default", label: "Sale Price" },
+          { value: "10%", label: "Discount 10%" },
+          { value: "20%", label: "Discount 20%" },
+          { value: "30%", label: "Discount 30%" },
+          { value: "Custom", label: "Custom" },
+        ];
 
         const loadSKU = (e) => {
           e.preventDefault();
@@ -138,52 +138,118 @@
                 </button>
               </div>
 
-              <div id="pricing-area" class="mt-[40px]">
-                <div id="Bundle">
-                  <h2 class="text-xl font-simibold">Bundle</h2>
-                  <table>
-                    <thead>
-                    <tr>
-                      <th></th>
-                      <th>Name</th>
-                      <th>SKU</th>
-                      <th>Order Bump</th>
-                      <th>Price</th>
-                      <th>Discount</th>
-                      <th>Final Price</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {bundles.map((item, index) => (
-                      <tr>
-                        <td>
-                          <input type="checkbox" onChange={event => selectBundle(event,item["id"])}/>
-                        </td>
-                        <td>{item["name"]}</td>
-                        <td>{item["sku"]}</td>
-                        <td>
-                          {item["orderBump"]} {item["price_o"]?"+"+item["price_o"]:"-"}
-                        </td>
-                        <td>
-                          {item["price"]}
-                          {item["price_o"] > 0 ? "(" + (item["price"] + item["price_o"]) + ")": ""}
-                        </td>
-                        <td> <Select options={discount_opts} value={discount_opts[0]}/></td>
-                        <td>
-                          {item["price"]}
-                          {item["price_o"] > 0 ? "(" + (item["price"] + item["price_o"]) + ")": ""}
-                        </td>
-                      </tr>
-                    ))}
-                    </tbody>
-                  </table>
+              <div id="pricing-area" class="mt-[30px]">
+                <div id="Bundle" class="flex flex-col">
+                  <div class="overflow-x-auto">
+                    <div class="py-4 inline-block min-w-full">
+                      <div class="overflow-hidden">
+                        <h2 class="text-xl font-simibold">Bundle</h2>
+                        <table class="min-w-full border text-center mt-4">
+                          <thead class="border-b bg-[#a7c941]">
+                            <tr>
+                              <th
+                                scope="col"
+                                class="text-sm font-medium text-white px-6 py-4 border-r"
+                              ></th>
+                              <th
+                                scope="col"
+                                class="text-sm font-medium text-white px-6 py-4 border-r"
+                              >
+                                Name
+                              </th>
+                              <th
+                                scope="col"
+                                class="text-sm font-medium text-white px-6 py-4 border-r"
+                              >
+                                SKU
+                              </th>
+                              <th
+                                scope="col"
+                                class="text-sm font-medium text-white px-6 py-4 border-r"
+                              >
+                                Order Bump
+                              </th>
+                              <th
+                                scope="col"
+                                class="text-sm font-medium text-white px-6 py-4 border-r"
+                              >
+                                Price
+                              </th>
+                              <th
+                                scope="col"
+                                class="text-sm font-medium text-white px-6 py-4 border-r"
+                              >
+                                Discount
+                              </th>
+                              <th
+                                scope="col"
+                                class="text-sm font-medium text-white px-6 py-4 border-r"
+                              >
+                                Final Price
+                              </th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {bundles.map((item, index) => (
+                              <tr class="border-b">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r">
+                                  <input
+                                    type="checkbox"
+                                    onChange={(event) =>
+                                      selectBundle(event, item["id"])
+                                    }
+                                  />
+                                </td>
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
+                                  {item["name"]}
+                                </td>
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
+                                  {item["sku"]}
+                                </td>
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
+                                  {item["orderBump"]}{" "}
+                                  {item["price_o"]
+                                    ? "+" + item["price_o"]
+                                    : "-"}
+                                </td>
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
+                                  {item["price"]}
+                                  {item["price_o"] > 0
+                                    ? "(" +
+                                      (item["price"] + item["price_o"]) +
+                                      ")"
+                                    : ""}
+                                </td>
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
+                                  {" "}
+                                  <Select
+                                    options={discount_opts}
+                                    value={discount_opts[0]}
+                                  />
+                                </td>
+                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
+                                  {item["price"]}
+                                  {item["price_o"] > 0
+                                    ? "(" +
+                                      (item["price"] + item["price_o"]) +
+                                      ")"
+                                    : ""}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div id="Order" class="mt-[40px]">
+
+                <div id="Order" class="mt-[20px]">
                   <h2 class="text-xl font-simibold">Order</h2>
                 </div>
               </div>
 
-              <div class="flex flex-col mt-4">
+              <div class="flex flex-col mt-6">
                 <label class="flex text-lg">
                   Full Price
                   <input
@@ -193,7 +259,7 @@
                     disabled="true"
                   />
                 </label>
-                <label class="flex text-lg mt-2">
+                <label class="flex text-lg mt-3">
                   Bundle Discount
                   <input
                     type="text"
@@ -202,7 +268,7 @@
                     disabled="true"
                   />
                 </label>
-                <label class="flex text-lg mt-2">
+                <label class="flex text-lg mt-3">
                   Total Price (Before Cart Discount)
                   <input
                     type="text"
@@ -215,15 +281,15 @@
 
               <div class="flex flex-col mt-4">
                 <h2 class="text-xl font-simibold">Cart Discount</h2>
-                <label class="flex text-lg mt-2">
+                <label class="flex text-lg mt-3">
                   Discount (%)
                   <input type="text" value={""} class={css_input + "ml-2"} />
                 </label>
-                <label class="flex text-lg mt-2">
+                <label class="flex text-lg mt-3">
                   Discount (Amount)
                   <input type="text" value={""} class={css_input + "ml-2"} />
                 </label>
-                <label class="flex text-lg mt-2">
+                <label class="flex text-lg mt-3">
                   Total Price (After Discount)
                   <input type="text" value={""} class={css_input + "ml-2"} />
                 </label>
