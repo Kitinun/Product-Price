@@ -26,11 +26,11 @@
     <div id="root"></div>
     <script type="text/babel">
       // CSS ********************
-      const css_container = "container mx-auto p-4";
+      const css_container = "container mx-auto p-4 ";
       const css_input =
         "block bg-white w-[500px] border border-slate-300 rounded-md px-3 shadow-sm ";
-      const css_label = "flex text-lg";
-      const css_button = "block w-auto bg-blue border rounded-md px-3 py-1";
+      const css_label = "flex text-lg ";
+      const css_button = "block border rounded-md px-3 py-1 text-white ";
 
       // Sample Data ********************
       const bundle_data = [
@@ -57,25 +57,88 @@
           orderBump: "GH",
           price: 1590,
           price_o: 599,
+        }
+      ];
+
+      const product_data = [
+        {
+          "sku" : "UX",
+          "name" : "UX Design",
+          "full price" : 4900,
+          "sale price" : 4900
         },
+        {
+          "sku" : "UI",
+          "name" : "UI Design",
+          "full price" : 3500,
+          "sale price" : 1190
+        },
+        {
+          "sku" : "CX",
+          "name" : "Customer Experience",
+          "full price" : 3500,
+          "sale price" : 1290
+        },{
+          "sku" : "ID",
+          "name" : "Icon Design",
+          "full price" : 3500,
+          "sale price" : 990
+        },
+        {
+          "sku" : "UX",
+          "name" : "UX Design",
+          "full price" : 4900,
+          "sale price" : 4900
+        },
+        {
+          "sku" : "SM",
+          "name" : "Systematic Thinking",
+          "full price" : 3500,
+          "sale price" : 1690
+        },
+        {
+          "sku" : "GM",
+          "name" : "Growth Mindset",
+          "full price" : 3500,
+          "sale price" : 1590
+        },
+        {
+          "sku" : "FT",
+          "name" : "Flutter",
+          "full price" : 5900,
+          "sale price" : 1290
+        },
+        {
+          "sku" : "RN",
+          "name" : "React-Native",
+          "full price" : 3500,
+          "sale price" : 990
+        }
       ];
       
       // Functions ********************
       var selectBundle = function(e, bundle_id) {
-        console.log(bundle_id + " : "+e.target.value);
+        console.log("bundle " + bundle_id + " : "+e.target.value);
       };
 
-      var selectBundle = function(e, bundle_id) {
-        console.log(bundle_id + " : "+e.target.value);
+      var selectDiscount = function(selectedOption, bundle_id) {
+        console.log("discount " + bundle_id + " : "+selectedOption.value);
+      };
+
+      var loadSKU = (e) => {
+        e.preventDefault();
+        setLoaded(true);
       };
 
       // App ********************
       const ReactAppFromCDN = () => {
         const [initSKU, setInitSKU] = React.useState("UX,UI,PS,AI");
         const [orderBump, setOrderBump] = React.useState("WD");
+
         const [sku, setSKU] = React.useState("UX,UI,PS,AI,WD");
         const [bundles, setBundles] = React.useState(bundle_data);
-
+        const [orders, serOrders] = React.useState(product_data);
+        
         const [loaded, setLoaded] = React.useState(false);
 
         const discount_opts = [
@@ -84,12 +147,7 @@
           { value: '20%', label: 'Discount 20%' },
           { value: '30%', label: 'Discount 30%' },
           { value: 'Custom', label: 'Custom' }
-        ]
-
-        const loadSKU = (e) => {
-          e.preventDefault();
-          setLoaded(true);
-        };
+        ];
 
         return (
           <div class={css_container}>
@@ -132,7 +190,7 @@
                   type="button"
                   name="button"
                   onClick={loadSKU}
-                  class="block w-auto bg-blue border rounded-md px-3 py-1 ml-4 bg-[#0085fc] text-white"
+                  class={css_button+"w-auto ml-4 bg-[#0085fc]"}
                 >
                   Load
                 </button>
@@ -157,7 +215,7 @@
                     {bundles.map((item, index) => (
                       <tr>
                         <td>
-                          <input type="checkbox" onChange={event => selectBundle(event,item["id"])}/>
+                          <input type="checkbox" onChange={event => selectBundle(event, item["id"])}/>
                         </td>
                         <td>{item["name"]}</td>
                         <td>{item["sku"]}</td>
@@ -168,7 +226,14 @@
                           {item["price"]}
                           {item["price_o"] > 0 ? "(" + (item["price"] + item["price_o"]) + ")": ""}
                         </td>
-                        <td> <Select options={discount_opts} value={discount_opts[0]}/></td>
+                        <td> 
+                          <Select 
+                          name={`selDis[${item["id"]}]`}
+                          options={discount_opts} 
+                          value={discount_opts[0]}
+                          onChange={selectedOption => selectDiscount(selectedOption, item["id"])}
+                          />
+                          </td>
                         <td>
                           {item["price"]}
                           {item["price_o"] > 0 ? "(" + (item["price"] + item["price_o"]) + ")": ""}
@@ -180,6 +245,46 @@
                 </div>
                 <div id="Order" class="mt-[40px]">
                   <h2 class="text-xl font-simibold">Order</h2>
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>SKU</th>
+                        <th>Name</th>
+                        <th>Full Price</th>
+                        <th>Sale Price</th>
+                        <th>Condition</th>
+                        <th>Detail Condition</th>
+                        <th>Bundle</th>
+                        <th>Final Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {orders.map((item, index) => (
+                      <tr>
+                        <td>
+                          {item["sku"]}
+                        </td>
+                        <td>
+                          {item["name"]}
+                        </td>
+                        <td>
+                          {item["full price"]}
+                        </td>
+                        <td>
+                          {item["sale price"]}
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                      </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 </div>
               </div>
 
@@ -234,7 +339,7 @@
                   type="button"
                   name="button"
                   onClick={""}
-                  class="block w-[300px] bg-blue border rounded-md px-3 py-1 bg-red-500 text-white"
+                  class={css_button+" w-[300px] bg-red-500"}
                 >
                   Reset
                 </button>
@@ -242,7 +347,7 @@
                   type="button"
                   name="button"
                   onClick={""}
-                  class="block w-[300px] bg-blue border rounded-md px-3 py-1 ml-12 bg-[#0085fc] text-white"
+                  class={css_button+" w-[300px] bg-[#0085fc] ml-12"}
                 >
                   Submit
                 </button>
