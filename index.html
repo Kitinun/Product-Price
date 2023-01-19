@@ -57,72 +57,73 @@
           orderBump: "GH",
           price: 1590,
           price_o: 599,
-        }
+        },
       ];
 
       const product_data = [
         {
-          "sku" : "UX",
-          "name" : "UX Design",
-          "full price" : 4900,
-          "sale price" : 4900
+          sku: "UX",
+          name: "UX Design",
+          "full price": 4900,
+          "sale price": 4900,
         },
         {
-          "sku" : "UI",
-          "name" : "UI Design",
-          "full price" : 3500,
-          "sale price" : 1190
+          sku: "UI",
+          name: "UI Design",
+          "full price": 3500,
+          "sale price": 1190,
         },
         {
-          "sku" : "CX",
-          "name" : "Customer Experience",
-          "full price" : 3500,
-          "sale price" : 1290
-        },{
-          "sku" : "ID",
-          "name" : "Icon Design",
-          "full price" : 3500,
-          "sale price" : 990
+          sku: "CX",
+          name: "Customer Experience",
+          "full price": 3500,
+          "sale price": 1290,
         },
         {
-          "sku" : "UX",
-          "name" : "UX Design",
-          "full price" : 4900,
-          "sale price" : 4900
+          sku: "ID",
+          name: "Icon Design",
+          "full price": 3500,
+          "sale price": 990,
         },
         {
-          "sku" : "SM",
-          "name" : "Systematic Thinking",
-          "full price" : 3500,
-          "sale price" : 1690
+          sku: "UX",
+          name: "UX Design",
+          "full price": 4900,
+          "sale price": 4900,
         },
         {
-          "sku" : "GM",
-          "name" : "Growth Mindset",
-          "full price" : 3500,
-          "sale price" : 1590
+          sku: "SM",
+          name: "Systematic Thinking",
+          "full price": 3500,
+          "sale price": 1690,
         },
         {
-          "sku" : "FT",
-          "name" : "Flutter",
-          "full price" : 5900,
-          "sale price" : 1290
+          sku: "GM",
+          name: "Growth Mindset",
+          "full price": 3500,
+          "sale price": 1590,
         },
         {
-          "sku" : "RN",
-          "name" : "React-Native",
-          "full price" : 3500,
-          "sale price" : 990
-        }
+          sku: "FT",
+          name: "Flutter",
+          "full price": 5900,
+          "sale price": 1290,
+        },
+        {
+          sku: "RN",
+          name: "React-Native",
+          "full price": 3500,
+          "sale price": 990,
+        },
       ];
 
       // Functions ********************
-      var selectBundle = function(e, bundle_id) {
-        console.log("bundle " + bundle_id + " : "+e.target.value);
+      var selectBundle = function (e, bundle_id) {
+        console.log("bundle " + bundle_id + " : " + e.target.value);
       };
 
-      var selectDiscount = function(selectedOption, bundle_id) {
-        console.log("discount " + bundle_id + " : "+selectedOption.value);
+      var selectDiscount = function (selectedOption, bundle_id) {
+        console.log("discount " + bundle_id + " : " + selectedOption.value);
       };
 
       var loadSKU = (e) => {
@@ -138,15 +139,15 @@
         const [sku, setSKU] = React.useState("UX,UI,PS,AI,WD");
         const [bundles, setBundles] = React.useState(bundle_data);
         const [orders, serOrders] = React.useState(product_data);
-        
+
         const [loaded, setLoaded] = React.useState(false);
 
         const discount_opts = [
-          { value: 'default', label: 'Sale Price' },
-          { value: '10%', label: 'Discount 10%' },
-          { value: '20%', label: 'Discount 20%' },
-          { value: '30%', label: 'Discount 30%' },
-          { value: 'Custom', label: 'Custom' }
+          { value: "default", label: "Sale Price" },
+          { value: "10%", label: "Discount 10%" },
+          { value: "20%", label: "Discount 20%" },
+          { value: "30%", label: "Discount 30%" },
+          { value: "Custom", label: "Custom" },
         ];
 
         return (
@@ -190,7 +191,7 @@
                   type="button"
                   name="button"
                   onClick={loadSKU}
-                  class={css_button+"w-auto ml-4 bg-[#0085fc]"}
+                  class={css_button + "w-auto ml-4 bg-[#0085fc]"}
                 >
                   Load
                 </button>
@@ -279,12 +280,15 @@
                                 </td>
                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
                                   {" "}
-                                  <Select 
-                          name={`selDis[${item["id"]}]`}
-                          options={discount_opts} 
-                          value={discount_opts[0]}
-                          onChange={selectedOption => selectDiscount(selectedOption, item["id"])}
-                          />
+                                  <Select
+                                    class="w-[200px]"
+                                    name={`selDis[${item["id"]}]`}
+                                    options={discount_opts}
+                                    value={discount_opts[0]}
+                                    onChange={(selectedOption) =>
+                                      selectDiscount(selectedOption, item["id"])
+                                    }
+                                  />
                                 </td>
                                 <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
                                   {item["price"]}
@@ -319,28 +323,16 @@
                     </thead>
                     <tbody>
                       {orders.map((item, index) => (
-                      <tr>
-                        <td>
-                          {item["sku"]}
-                        </td>
-                        <td>
-                          {item["name"]}
-                        </td>
-                        <td>
-                          {item["full price"]}
-                        </td>
-                        <td>
-                          {item["sale price"]}
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                        </td>
-                      </tr>
+                        <tr>
+                          <td>{item["sku"]}</td>
+                          <td>{item["name"]}</td>
+                          <td>{item["full price"]}</td>
+                          <td>{item["sale price"]}</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                        </tr>
                       ))}
                     </tbody>
                   </table>
@@ -398,7 +390,7 @@
                   type="button"
                   name="button"
                   onClick={""}
-                  class={css_button+" w-[300px] bg-red-500"}
+                  class={css_button + " w-[300px] bg-red-500"}
                 >
                   Reset
                 </button>
@@ -406,7 +398,7 @@
                   type="button"
                   name="button"
                   onClick={""}
-                  class={css_button+" w-[300px] bg-[#0085fc] ml-12"}
+                  class={css_button + " w-[300px] bg-[#0085fc] ml-12"}
                 >
                   Submit
                 </button>
