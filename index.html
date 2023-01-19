@@ -13,27 +13,28 @@
       }
     </style>
 
-    <script
-      crossorigin
-      src="https://unpkg.com/react@17/umd/react.production.min.js"
-    ></script>
-    <script
-      crossorigin
-      src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"
-    ></script>
-    <script src="https://unpkg.com/babel-standalone@6.26.0/babel.js"></script>
+    <script src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
+    <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
+    <script src="https://unpkg.com/classnames@2.2.6/index.js"></script>
+    <script src="https://unpkg.com/react-input-autosize@2.2.2/dist/react-input-autosize.js"></script>
+    <script src="https://unpkg.com/emotion@10.0.27/dist/emotion.umd.min.js"></script>
+    <script src="https://unpkg.com/react-select@2.4.4/dist/react-select.js"></script>
+    <script src="https://unpkg.com/@babel/standalone@7.12.7/babel.min.js"></script>
   </head>
   <body>
     <div id="root"></div>
     <script type="text/babel">
+      // CSS ********************
       const css_container = "container mx-auto p-4";
       const css_input = "block bg-white w-[500px] border border-slate-300 rounded-md px-3 shadow-sm "; 
       const css_label = "flex text-lg";
       const css_button = "block w-auto bg-blue border rounded-md px-3 py-1";
 
-      // Sample Data
-      const products = [
+      // Sample Data ********************
+      const bundle_data = [
         {
+          id : "b01",
           name: "UX,UI,CX (+ID)",
           sku: "UX, UI,CX",
           orderBump: "ID",
@@ -41,13 +42,15 @@
           price_o: 599,
         },
         {
+          id : "b02",
           name: "FT,RN,UX,UI",
           sku: "FT,RN,UX,UI",
-          orderBump: "-",
+          orderBump: "",
           price: 3290,
           price_o: 0,
         },
         {
+          id : "b03",
           name: "SM,GM (+GH)",
           sku: "SM,GM",
           orderBump: "GH",
@@ -55,14 +58,32 @@
           price_o: 599,
         },
       ];
+      
+      // Functions ********************
+      var selectBundle = function(e, bundle_id) {
+        console.log(bundle_id + " : "+e.target.value);
+      };
 
+      var selectBundle = function(e, bundle_id) {
+        console.log(bundle_id + " : "+e.target.value);
+      };
+
+      // App ********************
       const ReactAppFromCDN = () => {
         const [initSKU, setInitSKU] = React.useState("UX,UI,PS,AI");
         const [orderBump, setOrderBump] = React.useState("WD");
         const [sku, setSKU] = React.useState("UX,UI,PS,AI,WD");
-        const [bundles, setBundles] = React.useState(products);
+        const [bundles, setBundles] = React.useState(bundle_data);
 
         const [loaded, setLoaded] = React.useState(false);
+
+        const discount_opts = [
+          { value: 'default', label: 'Sale Price' },
+          { value: '10%', label: 'Discount 10%' },
+          { value: '20%', label: 'Discount 20%' },
+          { value: '30%', label: 'Discount 30%' },
+          { value: 'Custom', label: 'Custom' }
+        ]
 
         const loadSKU = (e) => {
           e.preventDefault();
@@ -116,21 +137,40 @@
                 <div id="Bundle">
                   <h2>Bundle</h2>
                   <table>
+                    <thead>
+                    <tr>
+                      <th></th>
+                      <th>Name</th>
+                      <th>SKU</th>
+                      <th>Order Bump</th>
+                      <th>Price</th>
+                      <th>Discount</th>
+                      <th>Final Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     {bundles.map((item, index) => (
                       <tr>
+                        <td>
+                          <input type="checkbox" onChange={event => selectBundle(event,item["id"])}/>
+                        </td>
                         <td>{item["name"]}</td>
                         <td>{item["sku"]}</td>
                         <td>
-                          {item["orderBump"]} (+{item["price_o"]})
+                          {item["orderBump"]} {item["price_o"]?"+"+item["price_o"]:"-"}
                         </td>
                         <td>
                           {item["price"]}
-                          {item["price_o"] > 0
-                            ? "(" + (item["price"] + item["price_o"]) + ")"
-                            : ""}
+                          {item["price_o"] > 0 ? "(" + (item["price"] + item["price_o"]) + ")": ""}
+                        </td>
+                        <td> <Select options={discount_opts} value={discount_opts[0]}/></td>
+                        <td>
+                          {item["price"]}
+                          {item["price_o"] > 0 ? "(" + (item["price"] + item["price_o"]) + ")": ""}
                         </td>
                       </tr>
                     ))}
+                    </tbody>
                   </table>
                 </div>
                 <div id="Order">
