@@ -20,6 +20,7 @@
     <script src="https://unpkg.com/react-input-autosize@2.2.2/dist/react-input-autosize.js"></script>
     <script src="https://unpkg.com/emotion@10.0.27/dist/emotion.umd.min.js"></script>
     <script src="https://unpkg.com/react-select@2.4.4/dist/react-select.js"></script>
+    <script src="https://unpkg.com/react-select@2.4.4/dist/react-select.js"></script>
     <script src="https://unpkg.com/@babel/standalone@7.12.7/babel.min.js"></script>
   </head>
   <body>
@@ -31,6 +32,8 @@
         "block bg-white w-[500px] border border-slate-300 rounded-md px-3 shadow-sm ";
       const css_label = "flex text-lg ";
       const css_button = "block border rounded-md px-3 py-1 text-white ";
+      const css_td =
+        "text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r ";
 
       // Header Table ********************
       const bundle_table = [
@@ -49,7 +52,7 @@
         { name: "Full Price" },
         { name: "Sale Price" },
         { name: "Condition" },
-        { name: "Detail Condition" },
+        { name: "Options" },
         { name: "Bundle" },
         { name: "Final Price" },
       ];
@@ -59,7 +62,7 @@
         {
           id: "b01",
           name: "UX,UI,CX (+ID)",
-          sku: "UX, UI,CX",
+          sku: ["UX", "UI", "CX"],
           orderBump: "ID",
           price: 2290,
           price_o: 599,
@@ -67,7 +70,7 @@
         {
           id: "b02",
           name: "FT,RN,UX,UI",
-          sku: "FT,RN,UX,UI",
+          sku: ["FT", "RN", "UX", "UI"],
           orderBump: "",
           price: 3290,
           price_o: 0,
@@ -75,7 +78,7 @@
         {
           id: "b03",
           name: "SM,GM (+GH)",
-          sku: "SM,GM",
+          sku: ["SM", "GM"],
           orderBump: "GH",
           price: 1590,
           price_o: 599,
@@ -139,30 +142,71 @@
         },
       ];
 
-      // Functions ********************
-      var selectBundle = function (e, bundle_id) {
-        console.log("bundle " + bundle_id + " : " + e.target.value);
-      };
-
-      var selectDiscount = function (selectedOption, bundle_id) {
-        console.log("discount " + bundle_id + " : " + selectedOption.value);
-      };
-
-      var loadSKU = (e) => {
-        e.preventDefault();
-        setLoaded(true);
-      };
-
       // App ********************
       const ReactAppFromCDN = () => {
+        // Functions ********************
+        var ChangeSKU = function (sku) {
+          setBundles(getFoundBundles(sku, bundle_data));
+          setSKU(sku);
+        };
+
+        var selectBundle = function (e, bundle_id) {
+          const selected = e.target.value;
+          if (selected) {
+            selBundles.push(bundle_id);
+          } else {
+            setSelBundles(
+              selBundles.filter(function (bundle) {
+                console.log(bundle);
+                return bundle.id == bundle_id;
+              })
+            );
+          }
+          console.log("bundle " + bundle_id + " : " + e.target.value);
+          console.log(JSON.stringify(selBundles));
+        };
+
+        var selectDiscount = function (selectedOption, bundle_id) {
+          console.log("discount " + bundle_id + " : " + selectedOption.value);
+        };
+
+        var containsAll = function (subSet, superSet) {
+          return subSet.every((element) => {
+            return superSet.includes(element);
+          });
+        };
+
+        var getFoundBundles = function (sku, bundle_data) {
+          let orders = sku.split(",");
+          return bundle_data.filter(function (bundle) {
+            return containsAll(bundle.sku, orders);
+          });
+        };
+
+        var createOrders = function (items) {
+          return items.map((each) => {
+            let cond = "Basic";
+            return { ...each, cond: cond, option: "" };
+          });
+        };
+
+        var loadSKU = (e) => {
+          e.preventDefault();
+          setLoaded(true);
+        };
+
+        // States ********************
         const [initSKU, setInitSKU] = React.useState("UX,UI,PS,AI");
         const [orderBump, setOrderBump] = React.useState("WD");
 
-        const [sku, setSKU] = React.useState("UX,UI,PS,AI,WD");
+        const [sku, setSKU] = React.useState("UX,UI,CX,AI,WD");
         const [bundleTable, setBundleTable] = React.useState(bundle_table);
         const [orderTable, setOrderTable] = React.useState(order_table);
-        const [bundles, setBundles] = React.useState(bundle_data);
-        const [orders, serOrders] = React.useState(product_data);
+        const [bundles, setBundles] = React.useState(
+          getFoundBundles(sku, bundle_data)
+        );
+        const [selBundles, setSelBundles] = React.useState([]);
+        const [orders, serOrders] = React.useState(createOrders(product_data));
 
         const [loaded, setLoaded] = React.useState(false);
 
@@ -172,6 +216,11 @@
           { value: "20%", label: "Discount 20%" },
           { value: "30%", label: "Discount 30%" },
           { value: "Custom", label: "Custom" },
+        ];
+
+        const bundle_opts = [
+          { value: "default", label: "default" },
+          { value: "course", label: "Change a Course" },
         ];
 
         return (
@@ -208,7 +257,7 @@
                       css_input +
                       "focus:outline-none focus:border-sky-500 focus:ring-sky-500 focus:ring-1 ml-[55px]"
                     }
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(e) => ChangeSKU(e.target.value)}
                   />
                 </label>
                 <button
@@ -250,19 +299,15 @@
                                     }
                                   />
                                 </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
-                                  {item["name"]}
-                                </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
-                                  {item["sku"]}
-                                </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
+                                <td class={css_td}>{item["name"]}</td>
+                                <td class={css_td}>{item["sku"].join(",")}</td>
+                                <td class={css_td}>
                                   {item["orderBump"]}{" "}
                                   {item["price_o"]
                                     ? "+" + item["price_o"]
                                     : "-"}
                                 </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
+                                <td class={css_td}>
                                   {item["price"]}
                                   {item["price_o"] > 0
                                     ? "(" +
@@ -270,11 +315,16 @@
                                       ")"
                                     : ""}
                                 </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
+                                <td class={css_td}>
                                   {" "}
                                   <Select
-                                    menuPortalTarget={document.body} 
-                                    styles={{ menuPortal: base => ({ ...base, zIndex: 10 }) }}
+                                    menuPortalTarget={document.body}
+                                    styles={{
+                                      menuPortal: (base) => ({
+                                        ...base,
+                                        zIndex: 10,
+                                      }),
+                                    }}
                                     name={`selDis[${item["id"]}]`}
                                     options={discount_opts}
                                     value={discount_opts[0]}
@@ -283,7 +333,7 @@
                                     }
                                   />
                                 </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
+                                <td class={css_td}>
                                   {item["price"]}
                                   {item["price_o"] > 0
                                     ? "(" +
@@ -320,22 +370,60 @@
                           <tbody>
                             {orders.map((item, index) => (
                               <tr class="border-b">
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
-                                  {item["sku"]}
+                                <td class={css_td}>{item["sku"]}</td>
+                                <td class={css_td}>{item["name"]}</td>
+                                <td class={css_td}>{item["full price"]}</td>
+                                <td class={css_td}>{item["sale price"]}</td>
+                                <td class={css_td}>{item["cond"]}</td>
+                                <td class={css_td}>
+                                  {
+                                    {
+                                      Basic: "-",
+                                      Bundle: (
+                                        <Select
+                                          menuPortalTarget={document.body}
+                                          styles={{
+                                            menuPortal: (base) => ({
+                                              ...base,
+                                              zIndex: 10,
+                                            }),
+                                          }}
+                                          name={`selBundle[${item["sku"]}]`}
+                                          options={bundle_opts}
+                                          value={bundle_opts[0]}
+                                          onChange={(selectedOption) =>
+                                            selectDiscount(
+                                              selectedOption,
+                                              item["sku"]
+                                            )
+                                          }
+                                        />
+                                      ),
+                                      Upsell: (
+                                        <Select
+                                          menuPortalTarget={document.body}
+                                          styles={{
+                                            menuPortal: (base) => ({
+                                              ...base,
+                                              zIndex: 10,
+                                            }),
+                                          }}
+                                          name={`selDiscount[${item["sku"]}]`}
+                                          options={discount_opts}
+                                          value={discount_opts[0]}
+                                          onChange={(selectedOption) =>
+                                            selectDiscount(
+                                              selectedOption,
+                                              item["sku"]
+                                            )
+                                          }
+                                        />
+                                      ),
+                                    }[item["cond"]]
+                                  }
                                 </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
-                                  {item["name"]}
-                                </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
-                                  {item["full price"]}
-                                </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r">
-                                  {item["sale price"]}
-                                </td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r"></td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r"></td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r"></td>
-                                <td class="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap border-r"></td>
+                                <td class={css_td}></td>
+                                <td class={css_td}></td>
                               </tr>
                             ))}
                           </tbody>
@@ -346,49 +434,63 @@
                 </div>
               </div>
 
-              <div class="flex flex-col mt-6">
-                <label class="flex text-lg">
-                  Full Price
+              <div class="flex flex-col mt-6 max-w-4xl">
+                <label class="md:flex  text-lg">
+                  <span class="md:w-1/3">Full Price</span>
                   <input
                     type="text"
                     value={""}
-                    class={css_input + "ml-2 bg-[#647687] text-white"}
+                    class={css_input + "ml-2 bg-[#647687] text-white md:w-2/3"}
                     disabled="true"
                   />
                 </label>
-                <label class="flex text-lg mt-3">
-                  Bundle Discount
+                <label class="md:flex  text-lg mt-3">
+                  <span class="md:w-1/3">Bundle Discount</span>
                   <input
                     type="text"
                     value={""}
-                    class={css_input + "ml-2 bg-[#647687] text-white"}
+                    class={css_input + "ml-2 bg-[#647687] text-white md:w-2/3"}
                     disabled="true"
                   />
                 </label>
-                <label class="flex text-lg mt-3">
-                  Total Price (Before Cart Discount)
+                <label class="md:flex  text-lg mt-3">
+                  <span class="md:w-1/3">
+                    Total Price (Before Cart Discount)
+                  </span>
                   <input
                     type="text"
                     value={""}
-                    class={css_input + "ml-2 bg-[#647687] text-white"}
+                    class={css_input + "ml-2 bg-[#647687] text-white md:w-2/3"}
                     disabled="true"
                   />
                 </label>
               </div>
 
-              <div class="flex flex-col mt-4">
+              <div class="flex flex-col mt-4 max-w-4xl">
                 <h2 class="text-xl font-simibold">Cart Discount</h2>
-                <label class="flex text-lg mt-3">
-                  Discount (%)
-                  <input type="text" value={""} class={css_input + "ml-2"} />
+                <label class="md:flex text-lg mt-3">
+                  <span class="md:w-1/3">Discount (%)</span>
+                  <input
+                    type="text"
+                    value={""}
+                    class={css_input + "ml-2 md:w-2/3"}
+                  />
                 </label>
-                <label class="flex text-lg mt-3">
-                  Discount (Amount)
-                  <input type="text" value={""} class={css_input + "ml-2"} />
+                <label class="md:flex text-lg mt-3 row-auto">
+                  <span class="md:w-1/3">Discount (Amount)</span>
+                  <input
+                    type="text"
+                    value={""}
+                    class={css_input + "ml-2 md:w-2/3"}
+                  />
                 </label>
-                <label class="flex text-lg mt-3">
-                  Total Price (After Discount)
-                  <input type="text" value={""} class={css_input + "ml-2"} />
+                <label class="md:flex text-lg mt-3 row-auto">
+                  <span class="md:w-1/3">Total Price (After Discount)</span>
+                  <input
+                    type="text"
+                    value={""}
+                    class={css_input + "ml-2 md:w-2/3"}
+                  />
                 </label>
               </div>
 
